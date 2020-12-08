@@ -14,10 +14,15 @@ CREATE TABLE employee (
   PRIMARY KEY (id)
 );
 
-DROP TABLE songs;
+SELECT * FROM employee;
 
-INSERT INTO songs (title, artist, genre)
-VALUES ("Solo", "Griz", "EDM");
+DROP TABLE employee;
+
+INSERT INTO employee (first_name, last_name, role_id, manager_id)
+VALUES ("Hammy", "Stinks", "software engineer", 1);
+
+
+
 
 CREATE TABLE role (
     id INTEGER NOT NULL AUTO_INCREMENT,
@@ -27,7 +32,34 @@ CREATE TABLE role (
     PRIMARY KEY (id)
 );
 
+SELECT * FROM role;
+
+DROP TABLE role;
+
+INSERT INTO role (title, salary, department_id)
+VALUES ("software engineer", "100K", 1);
+
+
+
+
 CREATE TABLE department (
-    id INTEGER NOT NULL AUTO_INCREMENT,
-    dept_name VARCHAR(30)
+	id INTEGER NOT NULL AUTO_INCREMENT,
+    dept_name VARCHAR(30),
+    PRIMARY KEY (id)
 );
+
+SELECT * FROM department;
+
+DROP TABLE department;
+
+INSERT INTO department (dept_name)
+VALUES ("Engineer");
+
+INSERT INTO department (dept_name)
+VALUES ("Sales");
+
+INSERT INTO department (dept_name)
+VALUES ("Finance");
+
+INSERT INTO department (dept_name)
+VALUES ("Legal");

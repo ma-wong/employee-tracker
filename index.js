@@ -49,13 +49,13 @@ function start() {
           addEmployee();
           break;
         case "View All Departments":
-          allDepartments();
+          viewDepartments();
           break;
         case "View All Roles":
-          allRoles();
+          viewRoles();
           break;
         case "View All Employees":
-          allEmployees();
+          viewEmployees();
           break;
         case "Update Employee Role":
           updateRole();
@@ -90,4 +90,12 @@ function addDepartment() {
             connection.end();
         });
     })
+}
+
+
+function viewDepartments() {
+    connection.query("SELECT * FROM department", function(err, res) {
+        if (err) throw err;
+        console.log(res);
+    });
 }
