@@ -21,6 +21,8 @@ DROP TABLE employee;
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES ("John", "Doe", 1, 1);
 
+-- selecting to view all employees--
+SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary FROM employee INNER JOIN role ON employee.role_id = role.id INNER JOIN department ON role.department_id = department.id;
 
 
 
@@ -39,7 +41,8 @@ DROP TABLE role;
 INSERT INTO role (title, salary, department_id)
 VALUES ("software engineer", "100K", 1);
 
-
+-- selecting all roles--
+SELECT role.id, role.title, role.salary, department.dept_name FROM role INNER JOIN department ON role.department_id = department.id;
 
 
 CREATE TABLE department (

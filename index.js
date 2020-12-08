@@ -88,24 +88,86 @@ function addDepartment() {
         connection.query("SELECT * FROM top5000 WHERE artist = ?", [res.artist], function(err, res) {
             if (err) throw err;
             console.log(res);
+        });
+    })
+}
+
+function addEmployee() {
+    inquirer
+      .prompt([
+        {
+            name: "first",
+            type: "input",
+            message: "what is the employee's first name?"
+        },
+        {
+            name: "last",
+            type: 'input',
+            message: "What is the employee's last name?"
+        },
+        {
+            name: "role",
+            type: 'input',
+            message: "What is the employee's role?",
+            choices: ["Sales Lead", "Salesperson"]
+        },
+        {
+            name: "manager",
+            type: 'list',
+            message: "Who is the employee's manager?",
+            choices: ["None", "Mike Chan", "Ashley Rodriguez", "Kevin Tupik"]
+        }
+    ])
+    .then(function(res) {
+        connection.query("SELECT * FROM top5000 WHERE year >= ? AND year <= ?", [res.start, res.end], function(err, res) {
+            if (err) throw err;
+            console.log(res);
             connection.end();
         });
     })
 }
 
 
-function viewDepartments() {
-    connection.query("SELECT * FROM department", function(err, res) {
+// function viewDepartments() {
+//     connection.query("SELECT * FROM department", function(err, res) {
+//         if (err) throw err;
+//         console.table(res);
+//         start();
+//     });
+// }
+
+// function viewRoles() {
+//     connection.query("SELECT role.id, role.title, role.salary, department.dept_name FROM role INNER JOIN department ON role.department_id = department.id", function(err, res) {
+//         if (err) throw err;
+//         console.table(res);
+//         start();
+//     });
+// }
+
+function viewEmployees() {
+    var query = "SELECT employee.first_name, employee.last_name, role.title, role.salary, department.dept_name ";
+    query += "FROM employees INNER JOIN top5000 ON (top_albums.artist = top5000.artist AND top_albums.year ";
+    query += "= top5000.year) WHERE (top_albums.artist = ? AND top5000.artist = ?) ORDER BY top_albums.year, top_albums.position";
+
+    connection.query("SELECT employee.first_name, employee.last_name, role.title, role.salary, department.dept_name FROM employees ", function(err, res) {
         if (err) throw err;
         console.table(res);
         start();
     });
 }
 
-function viewEmployees() {
-    connection.query("SELECT * FROM employees", function(err, res) {
-        if (err) throw err;
-        console.log(res);
-        start();
-    });
+function employeesByDept() {
+    inquirer
+      .prompt({
+        name: "department",
+        type: "list",
+        message: "Which department would you like to add?",
+        choices: []
+    })
+    .then(function(res) {
+        connection.query("SELECT * FROM top5000 WHERE artist = ?", [res.artist], function(err, res) {
+            if (err) throw err;
+            console.log(res);
+        });
+    })
 }
