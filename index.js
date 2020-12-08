@@ -18,7 +18,7 @@ connection.connect(function(err) {
   start();
 });
 
-// function which prompts the user for what action they should take
+// function that prompts user for what they want to do
 function start() {
   inquirer
     .prompt({
@@ -77,12 +77,13 @@ function start() {
     });
 }
 
+// Function that adds a department
 function addDepartment() {
     inquirer
       .prompt({
         name: "department",
         type: "input",
-        message: "Which department would you like to add?",
+        message: "What department would you like to add?",
     })
     .then(function(res) {
         connection.query("SELECT * FROM top5000 WHERE artist = ?", [res.artist], function(err, res) {
@@ -92,6 +93,7 @@ function addDepartment() {
     })
 }
 
+// Function that adds an employee
 function addEmployee() {
     inquirer
       .prompt([
@@ -127,7 +129,7 @@ function addEmployee() {
     })
 }
 
-
+// Function that displays all departments
 // function viewDepartments() {
 //     connection.query("SELECT * FROM department", function(err, res) {
 //         if (err) throw err;
@@ -136,6 +138,7 @@ function addEmployee() {
 //     });
 // }
 
+// Function that displays all roles
 // function viewRoles() {
 //     connection.query("SELECT role.id, role.title, role.salary, department.dept_name FROM role INNER JOIN department ON role.department_id = department.id", function(err, res) {
 //         if (err) throw err;
@@ -144,6 +147,7 @@ function addEmployee() {
 //     });
 // }
 
+// Function that displays all employees
 function viewEmployees() {
     var query = "SELECT employee.first_name, employee.last_name, role.title, role.salary, department.dept_name ";
     query += "FROM employees INNER JOIN top5000 ON (top_albums.artist = top5000.artist AND top_albums.year ";
@@ -156,6 +160,33 @@ function viewEmployees() {
     });
 }
 
+// Function to Update Employee's role
+function updateRole() {
+    inquirer
+      .prompt([
+        {
+            name: "employee",
+            type: 'list',
+            message: "Which employee's role do you want to update?",
+            choices: ["Sales Lead", "Salesperson"]
+        },
+        {
+            name: "role",
+            type: 'list',
+            message: "Which role do you want to assign to the selected employee?",
+            choices: ["None", "Mike Chan", "Ashley Rodriguez", "Kevin Tupik"]
+        }
+    ])
+    .then(function(res) {
+        connection.query("UPDATE employee SET role = ? WHERE employee.id = ?", [res.start, res.end], function(err, res) {
+            if (err) throw err;
+            console.log(res);
+            connection.end();
+        });
+    })
+}
+
+// Function that displays all employees in a specific department
 function employeesByDept() {
     inquirer
       .prompt({
@@ -170,4 +201,8 @@ function employeesByDept() {
             console.log(res);
         });
     })
+}
+
+function employeesByRole() {
+
 }
