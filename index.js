@@ -43,35 +43,51 @@ function start() {
           addDepartment();
           break;
         case "Add Role":
-          multiSearch();
+          addRole();
           break;
         case "Add Employee":
-          rangeSearch();
+          addEmployee();
           break;
         case "View All Departments":
-          songSearch();
+          allDepartments();
           break;
         case "View All Roles":
-          songSearch();
+          allRoles();
           break;
         case "View All Employees":
-          songSearch();
+          allEmployees();
           break;
         case "Update Employee Role":
-          songSearch();
+          updateRole();
           break;
         case "View All Employees By Department":
-          songSearch();
+          employeesByDept();
           break;
         case "View All Employees By Manager":
-          songSearch();
+          employeesByManager();
           break;
         case "View All Employees by Role":
-          songSearch();
+          employeesByRole();
           break;
         case "exit":
           connection.end();
           break;
         }
     });
+}
+
+function addDepartment() {
+    inquirer
+      .prompt({
+        name: "department",
+        type: "input",
+        message: "Which department would you like to add?",
+    })
+    .then(function(res) {
+        connection.query("SELECT * FROM top5000 WHERE artist = ?", [res.artist], function(err, res) {
+            if (err) throw err;
+            console.log(res);
+            connection.end();
+        });
+    })
 }

@@ -5,11 +5,12 @@ CREATE DATABASE employee_db;
 USE employee_db;
 
 
-CREATE TABLE songs (
+CREATE TABLE employee (
   id INTEGER NOT NULL AUTO_INCREMENT,
-  title VARCHAR(30) NULL,
-  artist VARCHAR(30) NULL,
-  genre VARCHAR(30) NULL,
+  first_name VARCHAR(30) NOT NULL,
+  last_name VARCHAR(30) NOT NULL,
+  role_id VARCHAR(30) NOT NULL,
+  manager_id INTEGER NULL,
   PRIMARY KEY (id)
 );
 
