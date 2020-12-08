@@ -95,38 +95,38 @@ function addDepartment() {
 
 // Function that adds an employee
 function addEmployee() {
-    inquirer
-      .prompt([
-        {
-            name: "first",
-            type: "input",
-            message: "what is the employee's first name?"
-        },
-        {
-            name: "last",
-            type: 'input',
-            message: "What is the employee's last name?"
-        },
-        {
-            name: "role",
-            type: 'input',
-            message: "What is the employee's role?",
-            choices: ["Sales Lead", "Salesperson"]
-        },
-        {
-            name: "manager",
-            type: 'list',
-            message: "Who is the employee's manager?",
-            choices: ["None", "Mike Chan", "Ashley Rodriguez", "Kevin Tupik"]
-        }
-    ])
-    .then(function(res) {
-        connection.query("SELECT * FROM top5000 WHERE year >= ? AND year <= ?", [res.start, res.end], function(err, res) {
-            if (err) throw err;
-            console.log(res);
-            connection.end();
-        });
-    })
+  inquirer
+    .prompt([
+      {
+          name: "first",
+          type: "input",
+          message: "what is the employee's first name?"
+      },
+      {
+          name: "last",
+          type: 'input',
+          message: "What is the employee's last name?"
+      },
+      {
+          name: "role",
+          type: 'input',
+          message: "What is the employee's role?",
+          choices: []
+      },
+      {
+          name: "manager",
+          type: 'list',
+          message: "Who is the employee's manager?",
+          choices: []
+      }
+  ])
+  .then(function(res) {
+      connection.query("INSERT INTO employees (employee) VALUES (?)", [res.first, res.last, res.role, res.manager], function(err, res) {
+          if (err) throw err;
+          console.log('Employee was added!');
+          start();
+      });
+  })
 }
 
 // Function that displays all departments
@@ -162,45 +162,45 @@ function viewEmployees() {
 
 // Function to Update Employee's role
 function updateRole() {
-    inquirer
-      .prompt([
-        {
-            name: "employee",
-            type: 'list',
-            message: "Which employee's role do you want to update?",
-            choices: ["Sales Lead", "Salesperson"]
-        },
-        {
-            name: "role",
-            type: 'list',
-            message: "Which role do you want to assign to the selected employee?",
-            choices: ["None", "Mike Chan", "Ashley Rodriguez", "Kevin Tupik"]
-        }
-    ])
-    .then(function(res) {
-        connection.query("UPDATE employee SET role = ? WHERE employee.id = ?", [res.start, res.end], function(err, res) {
-            if (err) throw err;
-            console.log(res);
-            connection.end();
-        });
-    })
+  inquirer
+    .prompt([
+      {
+          name: "employee",
+          type: 'list',
+          message: "Which employee's role do you want to update?",
+          choices: ["Sales Lead", "Salesperson"]
+      },
+      {
+          name: "role",
+          type: 'list',
+          message: "Which role do you want to assign to the selected employee?",
+          choices: ["None", "Mike Chan", "Ashley Rodriguez", "Kevin Tupik"]
+      }
+  ])
+  .then(function(res) {
+      connection.query("UPDATE employee SET role = ? WHERE employee.id = ?", [res.start, res.end], function(err, res) {
+          if (err) throw err;
+          console.log(res);
+          connection.end();
+      });
+  })
 }
 
 // Function that displays all employees in a specific department
 function employeesByDept() {
-    inquirer
-      .prompt({
-        name: "department",
-        type: "list",
-        message: "Which department would you like to add?",
-        choices: []
-    })
-    .then(function(res) {
-        connection.query("SELECT * FROM top5000 WHERE artist = ?", [res.artist], function(err, res) {
-            if (err) throw err;
-            console.log(res);
-        });
-    })
+  inquirer
+    .prompt({
+      name: "department",
+      type: "list",
+      message: "Which department would you like to add?",
+      choices: []
+  })
+  .then(function(res) {
+      connection.query("SELECT * FROM top5000 WHERE artist = ?", [res.artist], function(err, res) {
+          if (err) throw err;
+          console.log(res);
+      });
+  })
 }
 
 function employeesByRole() {
