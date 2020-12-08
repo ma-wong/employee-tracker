@@ -1,5 +1,6 @@
-var mysql = require("mysql");
-var inquirer = require("inquirer");
+const mysql = require("mysql");
+const inquirer = require("inquirer");
+const cTable = require('console.table');
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -96,6 +97,15 @@ function addDepartment() {
 function viewDepartments() {
     connection.query("SELECT * FROM department", function(err, res) {
         if (err) throw err;
+        console.table(res);
+        start();
+    });
+}
+
+function viewEmployees() {
+    connection.query("SELECT * FROM employees", function(err, res) {
+        if (err) throw err;
         console.log(res);
+        start();
     });
 }

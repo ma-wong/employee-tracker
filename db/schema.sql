@@ -9,7 +9,7 @@ CREATE TABLE employee (
   id INTEGER NOT NULL AUTO_INCREMENT,
   first_name VARCHAR(30),
   last_name VARCHAR(30),
-  role_id VARCHAR(30),
+  role_id INTEGER(10),
   manager_id INTEGER(10) NULL,
   PRIMARY KEY (id)
 );
@@ -19,7 +19,7 @@ SELECT * FROM employee;
 DROP TABLE employee;
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Hammy", "Stinks", "software engineer", 1);
+VALUES ("John", "Doe", 1, 1);
 
 
 
