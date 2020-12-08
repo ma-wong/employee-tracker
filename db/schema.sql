@@ -49,10 +49,10 @@ VALUES ("Oscar", "Martinez", 4, 1);
 
 
 -- selecting to view all employees--
-SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary 
+SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.dept_name 
 FROM employee 
 	INNER JOIN role ON employee.role_id = role.id
-    INNER JOIN department ON role.department_id = department.id;
+  INNER JOIN department ON role.department_id = department.id;
 
 CREATE TABLE role (
     id INTEGER NOT NULL AUTO_INCREMENT,

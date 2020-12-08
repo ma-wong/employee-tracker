@@ -95,37 +95,46 @@ function addDepartment() {
 
 // Function that adds an employee
 function addEmployee() {
-  inquirer
+  connection.query("SELECT * FROM role", function(err, results) {
+    if (err) throw err;
+    inquirer
     .prompt([
       {
-          name: "first",
-          type: "input",
-          message: "what is the employee's first name?"
+        name: "first",
+        type: "input",
+        message: "what is the employee's first name?"
       },
       {
-          name: "last",
-          type: 'input',
-          message: "What is the employee's last name?"
+        name: "last",
+        type: 'input',
+        message: "What is the employee's last name?"
       },
       {
-          name: "role",
-          type: 'input',
-          message: "What is the employee's role?",
-          choices: []
+        name: "role",
+        type: 'list',
+        message: "What is the employee's role?",
+        choices: function() {
+          var roleArray = [];
+          for (elem of results) {
+            roleArray.push(elem.title);
+          }
+          return roleArray;
+        }
       },
       {
-          name: "manager",
-          type: 'list',
-          message: "Who is the employee's manager?",
-          choices: []
+        name: "manager",
+        type: 'list',
+        message: "Who is the employee's manager?",
+        choices: []
       }
-  ])
-  .then(function(res) {
-      connection.query("INSERT INTO employees (employee) VALUES (?)", [res.first, res.last, res.role, res.manager], function(err, res) {
-          if (err) throw err;
-          console.log('Employee was added!');
-          start();
-      });
+    ])
+    .then(function(res) {
+        connection.query("INSERT INTO employees SET ?", {first_name: res.first, last_name: res.last, role_id: res.role.role_id, manager_id: res.manager}, function(err, res) {
+            if (err) throw err;
+            console.log('Employee was added!');
+            start();
+        });
+    })
   })
 }
 
