@@ -97,43 +97,52 @@ function addDepartment() {
 function addEmployee() {
   connection.query("SELECT * FROM role", function(err, results) {
     if (err) throw err;
-    inquirer
-    .prompt([
-      {
-        name: "first",
-        type: "input",
-        message: "what is the employee's first name?"
-      },
-      {
-        name: "last",
-        type: 'input',
-        message: "What is the employee's last name?"
-      },
-      {
-        name: "role",
-        type: 'list',
-        message: "What is the employee's role?",
-        choices: function() {
-          var roleArray = [];
-          for (elem of results) {
-            roleArray.push(elem.title);
+    connection.query("SELECT * FROM employee", function(err, res2) {
+      if (err) throw err;
+      inquirer
+      .prompt([
+        {
+          name: "first",
+          type: "input",
+          message: "what is the employee's first name?"
+        },
+        {
+          name: "last",
+          type: 'input',
+          message: "What is the employee's last name?"
+        },
+        {
+          name: "role",
+          type: 'list',
+          message: "What is the employee's role?",
+          choices: function() {
+            var roleArray = [];
+            for (elem of results) {
+              roleArray.push(elem.title);
+            }
+            return roleArray;
           }
-          return roleArray;
+        },
+        {
+          name: "manager",
+          type: 'list',
+          message: "Who is the employee's manager?",
+          choices: function() {
+            var managerArray = [];
+            for (elem of res2) {
+              managerArray.push(elem.first_name);
+            }
+            return managerArray;
+          }
         }
-      },
-      {
-        name: "manager",
-        type: 'list',
-        message: "Who is the employee's manager?",
-        choices: []
-      }
-    ])
-    .then(function(res) {
-        connection.query("INSERT INTO employees SET ?", {first_name: res.first, last_name: res.last, role_id: res.role.role_id, manager_id: res.manager}, function(err, res) {
+      ])
+      .then(function(res) {
+          connection.query("INSERT INTO employee SET ?", {first_name: res.first, last_name: res.last, role_id: res.role.role_id, manager_id: res.manager}, function(err, res) {
             if (err) throw err;
             console.log('Employee was added!');
             start();
-        });
+          });
+      })
     })
   })
 }
