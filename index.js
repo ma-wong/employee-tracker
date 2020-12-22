@@ -212,61 +212,90 @@ function addEmployee() {
 // }
 
 // Function that displays all employees
-function viewEmployees() {
-    var query = "SELECT employee.first_name, employee.last_name, role.title, role.salary, department.dept_name ";
-    query += "FROM employees INNER JOIN top5000 ON (top_albums.artist = top5000.artist AND top_albums.year ";
-    query += "= top5000.year) WHERE (top_albums.artist = ? AND top5000.artist = ?) ORDER BY top_albums.year, top_albums.position";
+// function viewEmployees() {
+//     var query = "SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.dept_name ";
+//     query += "FROM employee INNER JOIN role ON employee.role_id = role.id ";
+//     query += "INNER JOIN department ON role.department_id = department.id";
 
-    connection.query("SELECT employee.first_name, employee.last_name, role.title, role.salary, department.dept_name FROM employees ", function(err, res) {
-        if (err) throw err;
-        console.table(res);
-        start();
-    });
-}
+//     connection.query(query, function(err, res) {
+//       if (err) throw err;
+//       console.table(res);
+//       start();
+//     });
+// }
 
 // Function to Update Employee's role
 function updateRole() {
-  inquirer
-    .prompt([
-      {
+  connection.query("SELECT * FROM employee", function(err, res) {
+    if (err) throw err;
+    connection.query("SELECT * FROM role", function(err, res2) {
+      if (err) throw err;
+      inquirer
+      .prompt([
+        {
           name: "employee",
           type: 'list',
-          message: "Which employee's role do you want to update?",
-          choices: ["Sales Lead", "Salesperson"]
-      },
-      {
+          message: "Which employee do you want to update?",
+          choices: function() {
+            var employeeArray = [];
+            for (elem of res) {
+              employeeArray.push(elem.first_name);
+            }
+            return employeeArray;
+          }
+        },
+        {
           name: "role",
           type: 'list',
           message: "Which role do you want to assign to the selected employee?",
-          choices: ["None", "Mike Chan", "Ashley Rodriguez", "Kevin Tupik"]
-      }
-  ])
-  .then(function(res) {
-      connection.query("UPDATE employee SET role = ? WHERE employee.id = ?", [res.start, res.end], function(err, res) {
+          choices: function() {
+            var roleArray = [];
+            for (elem of res2) {
+              roleArray.push(elem.title);
+            }
+            return roleArray;
+          }
+        }
+      ])
+      .then(function(response) {
+        connection.query("UPDATE employee SET role = ? WHERE employee.id = ?", [response.role, response.employee], function(err) {
           if (err) throw err;
-          console.log(res);
-          connection.end();
-      });
+          start();
+        });
+      })
+    })
   })
 }
 
 // Function that displays all employees in a specific department
 function employeesByDept() {
-  inquirer
+  connection.query("SELECT * FROM department", function(err, res) {
+    if (err) throw err;
+    inquirer
     .prompt({
       name: "department",
       type: "list",
-      message: "Which department would you like to add?",
-      choices: []
-  })
-  .then(function(res) {
+      message: "Which department would you like to filter by?",
+      choices: function() {
+        var departmentArray = [];
+        for (elem of res) {
+          departmentArray.push(elem.dept_name);
+        }
+        return departmentArray;
+      }
+    })
+    .then(function(res) {
+      var query = "SELECT"
       connection.query("SELECT * FROM top5000 WHERE artist = ?", [res.artist], function(err, res) {
-          if (err) throw err;
-          console.log(res);
+        if (err) throw err;
+        console.log(res);
       });
+    })
   })
 }
 
 function employeesByRole() {
 
 }
+
+// where res.department = dept_name 
