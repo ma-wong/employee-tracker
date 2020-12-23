@@ -285,10 +285,15 @@ function employeesByDept() {
       }
     })
     .then(function(res) {
-      var query = "SELECT"
-      connection.query("SELECT * FROM top5000 WHERE artist = ?", [res.artist], function(err, res) {
+      var query = "SELECT employee.first_name, employee.last_name, department.dept_name ";
+      query += "FROM employee ";
+      query += "INNER JOIN role ON employee.role_id = role.id ";
+      query += "INNER JOIN department ON role.department_id = department.id ";
+      query += "WHERE department.dept_name = ?";
+      connection.query(query, [res.department], function(err, res) {
         if (err) throw err;
-        console.log(res);
+        console.table(res);
+        start();
       });
     })
   })
