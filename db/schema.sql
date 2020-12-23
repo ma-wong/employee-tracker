@@ -101,7 +101,7 @@ VALUES ("accountant", 130000.00, 3);
 
 
 CREATE TABLE department (
-	id INTEGER NOT NULL AUTO_INCREMENT,
+	  id INTEGER NOT NULL AUTO_INCREMENT,
     dept_name VARCHAR(30),
     PRIMARY KEY (id)
 );

@@ -64,11 +64,14 @@ function start() {
         case "View All Employees By Manager":
           employeesByManager();
           break;
-        case "View All Employees by Role":
+        case "View All Employees By Role":
           employeesByRole();
           break;
         case "exit":
           connection.end();
+          break;
+        default:
+          console.error("Hit unexpected case");
           break;
         }
     });
@@ -300,7 +303,32 @@ function employeesByDept() {
 }
 
 function employeesByRole() {
-
+  connection.query("SELECT * FROM role", function(err, res) {
+    if (err) throw err;
+    inquirer
+    .prompt({
+      name: "role",
+      type: "list",
+      message: "Which role would you like to filter by?",
+      choices: function() {
+        var roleArray = [];
+        for (elem of res) {
+          roleArray.push(elem.title);
+        }
+        return roleArray;
+      }
+    })
+    .then(function(res) {
+      var query = "SELECT employee.first_name, employee.last_name, role.title ";
+      query += "FROM employee ";
+      query += "INNER JOIN role ON employee.role_id = role.id ";
+      query += "WHERE role.title = ?";
+      connection.query(query, [res.role], function(err, res) {
+        if (err) throw err;
+        console.table(res);
+        start();
+      });
+    })
+  })
 }
 
-// where res.department = dept_name 
