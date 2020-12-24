@@ -120,19 +120,17 @@ function addRole() {
         choices: function() {
           var departmentArray = [];
           for (elem of results) {
-            departmentArray.push(elem.title);
+            departmentArray.push(elem.dept_name);
           }
           return departmentArray;
         }
       }
     ])
     .then(function(res) {
-      connection.query("INSERT INTO role SET ?", {
-        title: res.role,
-        salary: res,salary,
-        department_id: res.department
-      },
-      function(err) {
+      query = "INSERT INTO role ";
+      query += "SET title = ?, salary = ?, department_id = (";
+      query += "SELECT id FROM department WHERE department.dept_name = ?)"
+      connection.query(query, [res.role, res.salary, res.department], function(err) {
         if (err) throw err;
         console.log("Role was successfully added!");
         start();
@@ -186,7 +184,11 @@ function addEmployee() {
         }
       ])
       .then(function(res) {
-        connection.query("INSERT INTO employee SET ?", {first_name: res.first, last_name: res.last, role_id: res.role.role_id, manager_id: res.manager}, function(err, res) {
+        query = "INSERT INTO employee ";
+        query += "SET first_name = ?, last_name = ?, ";
+        query += "role_id = (SELECT id FROM role WHERE role.title = ?), ";
+        query += "manager_id = (SELECT id FROM employee WHERE employee.first_name = ?) "
+        connection.query(query, [res.first, res.last, res.role, res.manager], function(err) {
           if (err) throw err;
           console.log('Employee was added!');
           start();
@@ -255,14 +257,16 @@ function updateRole() {
             var roleArray = [];
             for (elem of res2) {
               roleArray.push(elem.title);
-              roleArray.push(elem.id)
             }
             return roleArray;
           }
         }
       ])
       .then(function(response) {
-        connection.query("UPDATE employee SET role_id = ? WHERE employee.first_name = ?", [response.role, response.employee], function(err) {
+        var query = "UPDATE employee ";
+        query += "SET employee.role_id = (SELECT id FROM role WHERE role.title = ?) ";
+        query += "WHERE employee.first_name = ? "
+        connection.query(query, [response.role, response.employee], function(err) {
           if (err) throw err;
           console.log("Employee Updated!");
           start();
