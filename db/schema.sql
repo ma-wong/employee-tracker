@@ -46,13 +46,26 @@ INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES ("Oscar", "Martinez", 4, 1);
 
 
+DELETE FROM employee
+WHERE id = 10;
 
+SELECT employee.id, employee.first_name, role.title
+FROM employee INNER JOIN role
+ON employee.role_id = role.id;
 
 -- selecting to view all employees--
 SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.dept_name 
 FROM employee 
 	INNER JOIN role ON employee.role_id = role.id
-  INNER JOIN department ON role.department_id = department.id;
+    INNER JOIN department ON role.department_id = department.id;
+
+-- selecting to view all employees and departments --
+SELECT employee.first_name, employee.last_name, department.dept_name
+FROM employee
+	INNER JOIN role ON employee.role_id = role.id
+    INNER JOIN department ON role.department_id = department.id
+    WHERE department.dept_name = ?;
+    
 
 CREATE TABLE role (
     id INTEGER NOT NULL AUTO_INCREMENT,
@@ -101,7 +114,7 @@ VALUES ("accountant", 130000.00, 3);
 
 
 CREATE TABLE department (
-	  id INTEGER NOT NULL AUTO_INCREMENT,
+	id INTEGER NOT NULL AUTO_INCREMENT,
     dept_name VARCHAR(30),
     PRIMARY KEY (id)
 );
