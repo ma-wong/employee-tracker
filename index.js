@@ -77,25 +77,25 @@ function start() {
     });
 }
 
-// // Function that adds a department
-// function addDepartment() {
-//     inquirer
-//       .prompt({
-//         name: "department",
-//         type: "input",
-//         message: "What department would you like to add?",
-//     })
-//     .then(function(res) {
-//         connection.query("INSERT INTO department SET ?", {
-//           dept_name: res.department
-//         },
-//         function(err) {
-//           if (err) throw err;
-//           console.log("Department was successfully added!");
-//           start();
-//         });
-//     })
-// }
+// Function that adds a department
+function addDepartment() {
+    inquirer
+      .prompt({
+        name: "department",
+        type: "input",
+        message: "What department would you like to add?",
+    })
+    .then(function(res) {
+        connection.query("INSERT INTO department SET ?", {
+          dept_name: res.department
+        },
+        function(err) {
+          if (err) throw err;
+          console.log("Department was successfully added!");
+          start();
+        });
+    })
+}
 
 // Function that adds a role
 function addRole() {
@@ -144,6 +144,7 @@ function addRole() {
 function addEmployee() {
   connection.query("SELECT * FROM role", function(err, results) {
     if (err) throw err;
+    let nameToId = {};
     connection.query("SELECT * FROM employee", function(err, res2) {
       if (err) throw err;
       inquirer
@@ -177,6 +178,8 @@ function addEmployee() {
           choices: function() {
             var managerArray = [];
             for (elem of res2) {
+              // add names and ids to map here.
+              nameToId[elem.first_name] = elem.id;
               managerArray.push(elem.first_name);
             }
             return managerArray;
@@ -184,11 +187,12 @@ function addEmployee() {
         }
       ])
       .then(function(res) {
+        let managerId = nameToId[res.manager];
         query = "INSERT INTO employee ";
         query += "SET first_name = ?, last_name = ?, ";
         query += "role_id = (SELECT id FROM role WHERE role.title = ?), ";
-        query += "manager_id = (SELECT id FROM employee WHERE employee.first_name = ?) "
-        connection.query(query, [res.first, res.last, res.role, res.manager], function(err) {
+        query += "manager_id = ?"
+        connection.query(query, [res.first, res.last, res.role, managerId], function(err) {
           if (err) throw err;
           console.log('Employee was added!');
           start();
@@ -198,36 +202,36 @@ function addEmployee() {
   })
 }
 
-// // Function that displays all departments
-// function viewDepartments() {
-//     connection.query("SELECT * FROM department", function(err, res) {
-//         if (err) throw err;
-//         console.table(res);
-//         start();
-//     });
-// }
+// Function that displays all departments
+function viewDepartments() {
+    connection.query("SELECT * FROM department", function(err, res) {
+        if (err) throw err;
+        console.table(res);
+        start();
+    });
+}
 
-// // Function that displays all roles
-// function viewRoles() {
-//     connection.query("SELECT role.id, role.title, role.salary, department.dept_name FROM role INNER JOIN department ON role.department_id = department.id", function(err, res) {
-//         if (err) throw err;
-//         console.table(res);
-//         start();
-//     });
-// }
+// Function that displays all roles
+function viewRoles() {
+    connection.query("SELECT role.id, role.title, role.salary, department.dept_name FROM role INNER JOIN department ON role.department_id = department.id", function(err, res) {
+        if (err) throw err;
+        console.table(res);
+        start();
+    });
+}
 
 // Function that displays all employees
-// function viewEmployees() {
-//     var query = "SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.dept_name ";
-//     query += "FROM employee INNER JOIN role ON employee.role_id = role.id ";
-//     query += "INNER JOIN department ON role.department_id = department.id";
+function viewEmployees() {
+    var query = "SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.dept_name ";
+    query += "FROM employee INNER JOIN role ON employee.role_id = role.id ";
+    query += "INNER JOIN department ON role.department_id = department.id";
 
-//     connection.query(query, function(err, res) {
-//       if (err) throw err;
-//       console.table(res);
-//       start();
-//     });
-// }
+    connection.query(query, function(err, res) {
+      if (err) throw err;
+      console.table(res);
+      start();
+    });
+}
 
 // Function to Update Employee's role
 function updateRole() {
@@ -276,66 +280,66 @@ function updateRole() {
   })
 }
 
-// // Function that displays all employees in a specific department
-// function employeesByDept() {
-//   connection.query("SELECT * FROM department", function(err, res) {
-//     if (err) throw err;
-//     inquirer
-//     .prompt({
-//       name: "department",
-//       type: "list",
-//       message: "Which department would you like to filter by?",
-//       choices: function() {
-//         var departmentArray = [];
-//         for (elem of res) {
-//           departmentArray.push(elem.dept_name);
-//         }
-//         return departmentArray;
-//       }
-//     })
-//     .then(function(res) {
-//       var query = "SELECT employee.first_name, employee.last_name, department.dept_name ";
-//       query += "FROM employee ";
-//       query += "INNER JOIN role ON employee.role_id = role.id ";
-//       query += "INNER JOIN department ON role.department_id = department.id ";
-//       query += "WHERE department.dept_name = ?";
-//       connection.query(query, [res.department], function(err, res) {
-//         if (err) throw err;
-//         console.table(res);
-//         start();
-//       });
-//     })
-//   })
-// }
+// Function that displays all employees in a specific department
+function employeesByDept() {
+  connection.query("SELECT * FROM department", function(err, res) {
+    if (err) throw err;
+    inquirer
+    .prompt({
+      name: "department",
+      type: "list",
+      message: "Which department would you like to filter by?",
+      choices: function() {
+        var departmentArray = [];
+        for (elem of res) {
+          departmentArray.push(elem.dept_name);
+        }
+        return departmentArray;
+      }
+    })
+    .then(function(res) {
+      var query = "SELECT employee.first_name, employee.last_name, department.dept_name ";
+      query += "FROM employee ";
+      query += "INNER JOIN role ON employee.role_id = role.id ";
+      query += "INNER JOIN department ON role.department_id = department.id ";
+      query += "WHERE department.dept_name = ?";
+      connection.query(query, [res.department], function(err, res) {
+        if (err) throw err;
+        console.table(res);
+        start();
+      });
+    })
+  })
+}
 
-// // Function that displays all employees with have a specific role
-// function employeesByRole() {
-//   connection.query("SELECT * FROM role", function(err, res) {
-//     if (err) throw err;
-//     inquirer
-//     .prompt({
-//       name: "role",
-//       type: "list",
-//       message: "Which role would you like to filter by?",
-//       choices: function() {
-//         var roleArray = [];
-//         for (elem of res) {
-//           roleArray.push(elem.title);
-//         }
-//         return roleArray;
-//       }
-//     })
-//     .then(function(res) {
-//       var query = "SELECT employee.first_name, employee.last_name, role.title ";
-//       query += "FROM employee ";
-//       query += "INNER JOIN role ON employee.role_id = role.id ";
-//       query += "WHERE role.title = ?";
-//       connection.query(query, [res.role], function(err, res) {
-//         if (err) throw err;
-//         console.table(res);
-//         start();
-//       });
-//     })
-//   })
-// }
+// Function that displays all employees with have a specific role
+function employeesByRole() {
+  connection.query("SELECT * FROM role", function(err, res) {
+    if (err) throw err;
+    inquirer
+    .prompt({
+      name: "role",
+      type: "list",
+      message: "Which role would you like to filter by?",
+      choices: function() {
+        var roleArray = [];
+        for (elem of res) {
+          roleArray.push(elem.title);
+        }
+        return roleArray;
+      }
+    })
+    .then(function(res) {
+      var query = "SELECT employee.first_name, employee.last_name, role.title ";
+      query += "FROM employee ";
+      query += "INNER JOIN role ON employee.role_id = role.id ";
+      query += "WHERE role.title = ?";
+      connection.query(query, [res.role], function(err, res) {
+        if (err) throw err;
+        console.table(res);
+        start();
+      });
+    })
+  })
+}
 

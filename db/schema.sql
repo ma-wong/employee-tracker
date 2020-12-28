@@ -4,7 +4,7 @@ CREATE DATABASE employee_db;
 
 USE employee_db;
 
-
+-- Creating employee table -- 
 CREATE TABLE employee (
   id INTEGER NOT NULL AUTO_INCREMENT,
   first_name VARCHAR(30),
@@ -66,7 +66,7 @@ FROM employee
     INNER JOIN department ON role.department_id = department.id
     WHERE department.dept_name = ?;
     
-
+-- creating role table -- 
 CREATE TABLE role (
     id INTEGER NOT NULL AUTO_INCREMENT,
     title VARCHAR(30),
@@ -110,9 +110,7 @@ INSERT INTO role (title, salary, department_id)
 VALUES ("accountant", 130000.00, 3);
 
 
-
-
-
+-- Creating department table -- 
 CREATE TABLE department (
 	id INTEGER NOT NULL AUTO_INCREMENT,
     dept_name VARCHAR(30),
@@ -142,3 +140,13 @@ INSERT INTO department (dept_name)
 VALUES ("Managers");
 
 SELECT role.id, role.title, role.salary, department.dept_name FROM role INNER JOIN department ON role.department_id = department.id;
+
+
+-- updating employee table role id where role title = ? and employee first name = ? --
+UPDATE employee
+SET employee.role_id = (
+	SELECT id
+    FROM role
+    WHERE role.title = "branch manager"
+)
+WHERE employee.first_name = "Michael";
