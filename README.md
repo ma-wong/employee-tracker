@@ -24,7 +24,7 @@ Command line allows users to:
 * update employee roles
 
 ### Functionality
-The employee-tracker is initialized when the user runs the command "node index.js" in the terminal. From there, the user will be prompted to select which command they would like to execute. Some of the possible commands include viewing all employees, adding new employees, adding new roles, updating employees, etc. Once the function is finished, the app will return to the main menu so that the user may select another command. To close out of the application, the user will select the "EXIT" command.
+The employee-tracker is initialized when the user runs the command "node index.js" in the terminal. From there, the user will be prompted to select which command they would like to execute. Some of the possible commands include: view all employees, add new employees, add new roles, updating employees, etc. Once the function is finished, the app will return to the main menu so that the user may select another command or exit the application.
 
 ### Preview
 ![Add-Role](./assets/add-role.png)
@@ -35,4 +35,5 @@ Example of the main menu and all function options
 
 ![View-Employees](./assets/view-employees.png)
 Example of table produced when "View All Employees" function is selected
+
 #### Link
