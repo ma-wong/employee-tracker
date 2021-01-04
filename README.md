@@ -14,7 +14,7 @@ This repository contains the code used to create an employee tracker application
 * [console.table](https://www.npmjs.com/package/console.table)
 
 ### Installatiohn
-In order to install necessary dependencies, please run the following command: npm i install
+In order to install necessary dependencies, please run the following command: npm i
 
 ### Features
 Command line allows users to:
@@ -37,3 +37,4 @@ Example of the main menu and all function options
 Example of table produced when "View All Employees" function is selected
 
 #### Link
+[Link to walkthrough video]()
