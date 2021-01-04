@@ -13,7 +13,7 @@ This repository contains the code used to create an employee tracker application
 * [MySQL](https://www.npmjs.com/package/mysql)
 * [console.table](https://www.npmjs.com/package/console.table)
 
-### Installatiohn
+### Installation
 In order to install necessary dependencies, please run the following command: npm i
 
 ### Features
