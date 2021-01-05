@@ -63,7 +63,7 @@ function start() {
         case "View All Employees By Role":
           employeesByRole();
           break;
-        case "exit":
+        case "EXIT":
           connection.end();
           break;
         default:

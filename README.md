@@ -37,4 +37,4 @@ Example of the main menu and all function options
 Example of table produced when "View All Employees" function is selected
 
 #### Link
-[Link to walkthrough video]()
+[Link to walkthrough video](https://www.dropbox.com/s/tw0mdn93nwua36f/employee-tracker%20walkthrough.mov?dl=0)
