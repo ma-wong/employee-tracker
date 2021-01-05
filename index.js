@@ -31,7 +31,6 @@ function start() {
         "View All Employees", 
         "Update Employee Role", 
         "View All Employees By Department",
-        "View All Employees By Manager", 
         "View All Employees By Role", 
         "EXIT"]
     })
@@ -60,9 +59,6 @@ function start() {
           break;
         case "View All Employees By Department":
           employeesByDept();
-          break;
-        case "View All Employees By Manager":
-          employeesByManager();
           break;
         case "View All Employees By Role":
           employeesByRole();
